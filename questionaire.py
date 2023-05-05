@@ -17,7 +17,7 @@ user_inputs = {'age': None,
 age = st.number_input("What is your age?", min_value=0, max_value=120, step=1)
 
 # Question 2: Height
-height = st.number_input("What is your height in centimeters?", min_value=0.0, max_value=3.0, step=0.01)
+height = st.number_input("What is your height in centimeters?", min_value=0.0, max_value=300.0, step=0.01)
 
 # Question 3: Yes/No
 breech_position = st.radio("Is your baby currently in a breech position?", options=[0, 1])
@@ -57,7 +57,7 @@ with open('delivery_mode_model.sav', 'rb') as f:
     model = pickle.load(f)
 
 # Check if all questions have been answered
-if None not in user_inputs.values():
+#if None not in user_inputs.values():
     # Submit button
     if st.button('Submit'):
         # Generate output
@@ -97,6 +97,6 @@ if None not in user_inputs.values():
         ax.set_title("Percentage of each method")
         st.pyplot(fig)
 
-else :
-    st.warning('Please answer all questions before submitting.')
+#else :
+#    st.warning('Please answer all questions before submitting.')
 
