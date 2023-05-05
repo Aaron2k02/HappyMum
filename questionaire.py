@@ -20,28 +20,36 @@ age = st.number_input("What is your age?", min_value=0, max_value=120, step=1)
 height = st.number_input("What is your height in centimeters?", min_value=0.0, max_value=300.0, step=0.01)
 
 # Question 3: Yes/No
-breech_position = st.radio("Is your baby currently in a breech position?", options=[0, 1])
+breech_position = st.radio("Is your baby currently in a breech position?", options=['No', 'Yes'])
+breech_position = 1 if breech_position == 'Yes' else 0
 
 # Question 4: Yes/No
-cephalic_position = st.radio("Is your baby currently in a cephalic position?", options=[0, 1])
+cephalic_position = st.radio("Is your baby currently in a cephalic position?", options=['No', 'Yes'])
+cephalic_position = 1 if cephalic_position == 'Yes' else 0
 
 # Question 5: Yes/No
-baby_position = st.radio("Is your baby currently in a position other than breech or cephalic?", options=[0, 1])
+baby_position = st.radio("Is your baby currently in a position other than breech or cephalic?", options=['No', 'Yes'])
+baby_position = 1 if baby_position == 'Yes' else 0
 
 # Question 6: Yes/No
-amniotic_fluid_level  = st.radio("Is your amniotic fluid level normal?", options=[0, 1])
+amniotic_fluid_level  = st.radio("Is your amniotic fluid level normal?", options=['No', 'Yes'])
+amniotic_fluid_level = 1 if amniotic_fluid_level == 'Yes' else 0
 
 # Question 7: Yes/No
-hypertension  = st.radio("Do you have hypertension?", options=[0, 1])
+hypertension  = st.radio("Do you have hypertension?", options=['No', 'Yes'])
+hypertension = 1 if hypertension == 'Yes' else 0
 
 # Question 8: Yes/No
-pregnancy_induced_hypertension  = st.radio("Do you have pregnancy-induced hypertension?", options=[0, 1])
+pregnancy_induced_hypertension  = st.radio("Do you have pregnancy-induced hypertension?", options=['No', 'Yes'])
+pregnancy_induced_hypertension = 1 if pregnancy_induced_hypertension == 'Yes' else 0
 
 # Question 9: Yes/No
-gestational_diabetes_mellitus  = st.radio("Do you have gestational diabetes mellitus?", options=[0, 1])
+gestational_diabetes_mellitus  = st.radio("Do you have gestational diabetes mellitus?", options=['No', 'Yes'])
+gestational_diabetes_mellitus = 1 if gestational_diabetes_mellitus == 'Yes' else 0
 
 # Question 10: Yes/No
-diabetes = st.radio("Do you have diabetes?", options=[0, 1])
+diabetes = st.radio("Do you have diabetes?", options=['No', 'Yes'])
+diabetes = 1 if diabetes == 'Yes' else 0
 
 # Import model 
 import pickle
@@ -66,8 +74,6 @@ with open('delivery_mode_model.sav', 'rb') as f:
                 'amniotic_normal': [amniotic_fluid_level], 'hypertension_nil': [1-hypertension],
                 'hypertension_pih': [pregnancy_induced_hypertension],
                 'diabetes_gdm': [gestational_diabetes_mellitus], 'diabetes_nil': [1-diabetes]}
-        st.write("Here are your inputs:")
-        st.write(inputs)
 
         #Dictionary 
         Birth_delivery = ["Vaginal Delivery","Lower segment Caesarean section","Others"]
