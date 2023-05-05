@@ -71,7 +71,7 @@ with open('delivery_mode_model.sav', 'rb') as f:
 
         #Dictionary 
         Birth_delivery = ["Vaginal Delivery","Lower segment Caesarean section","Others"]
-        
+
         inputs_df = pd.DataFrame(data = inputs)
 
         test_Predict = model.predict(inputs_df)
@@ -96,6 +96,20 @@ with open('delivery_mode_model.sav', 'rb') as f:
         ax.set_ylabel("Delivery Method")
         ax.set_title("Percentage of each method")
         st.pyplot(fig)
+
+        # Print recommended delivery method result and note
+        if test_Predict[0] == 0:
+            result = 'Vaginal Delivery'
+            note = 'Stay active and upright during labour'
+        elif test_Predict[0] == 1:
+            result = 'Lower segment Caesarean section'
+            note = 'You may need to adjust your exercise routine depending on your individual situation'
+        else:
+            result = 'Others'
+            note = 'You might need to consult with a doctor for a suitable birth delivery method'
+
+        st.write("\nYour Recommended Delivery Method Result:", result)
+        st.write(note)
 
 #else :
 #    st.warning('Please answer all questions before submitting.')
