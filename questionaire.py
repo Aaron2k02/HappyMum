@@ -1,18 +1,6 @@
 # from pathlib import Path
 import streamlit as st
 
-# Define a dictionary to store the user's inputs
-user_inputs = {'age': None,
-               'height': None,
-               'breech_position': None,
-               'cephalic_position': None,
-               'baby_position': None,
-               'amniotic_fluid_level': None,
-               'hypertension': None,
-               'pregnancy_induced_hypertension': None,
-               'gestational_diabetes_mellitus': None,
-               'diabetes': None}
-
 # Question 1: Age
 age = st.number_input("What is your age?", min_value=0, max_value=120, step=1)
 
@@ -64,59 +52,56 @@ import matplotlib.pyplot as plt
 with open('delivery_mode_model.sav', 'rb') as f:
     model = pickle.load(f)
 
-# Check if all questions have been answered
-#if None not in user_inputs.values():
-    # Submit button
-    if st.button('Submit'):
-        # Generate output
-        inputs = {'mum_age': [age], 'mum_height': [height], 'presentation_breech': [breech_position],
-                'presentation_cephalic': [cephalic_position], 'presentation_other': [baby_position],
-                'amniotic_normal': [amniotic_fluid_level], 'hypertension_nil': [1-hypertension],
-                'hypertension_pih': [pregnancy_induced_hypertension],
-                'diabetes_gdm': [gestational_diabetes_mellitus], 'diabetes_nil': [1-diabetes]}
 
-        #Dictionary 
-        Birth_delivery = ["Vaginal Delivery","Lower segment Caesarean section","Others"]
+# Submit button
+if st.button('Submit'):
+    # Generate output
+    inputs = {'mum_age': [age], 'mum_height': [height], 'presentation_breech': [breech_position],
+            'presentation_cephalic': [cephalic_position], 'presentation_other': [baby_position],
+            'amniotic_normal': [amniotic_fluid_level], 'hypertension_nil': [1-hypertension],
+            'hypertension_pih': [pregnancy_induced_hypertension],
+            'diabetes_gdm': [gestational_diabetes_mellitus], 'diabetes_nil': [1-diabetes]}
 
-        inputs_df = pd.DataFrame(data = inputs)
+    #Dictionary 
+    Birth_delivery = ["Vaginal Delivery","Lower segment Caesarean section","Others"]
 
-        test_Predict = model.predict(inputs_df)
+    inputs_df = pd.DataFrame(data = inputs)
 
-        test_Predict_prob = model.predict_proba(inputs_df)
+    test_Predict = model.predict(inputs_df)
 
-        # Probability of each birth delivery method class 
-        st.write('Percentage of probability')
-        j = 0
-        x_list = []
-        y_list = []
-        for i in test_Predict_prob[0]:
-            st.write("{} : {c}". format(Birth_delivery[j], c = i*100))
-            y_list.append(Birth_delivery[j])
-            x_list.append(i*100)
-            j += 1
+    test_Predict_prob = model.predict_proba(inputs_df)
 
-        # Plot bar graph for percentage of probability
-        fig, ax = plt.subplots()
-        ax.barh(y_list, x_list)
-        ax.set_xlabel("Percentage of probability (%)")
-        ax.set_ylabel("Delivery Method")
-        ax.set_title("Percentage of each method")
-        st.pyplot(fig)
+    # Probability of each birth delivery method class 
+    st.write('Percentage of probability')
+    j = 0
+    x_list = []
+    y_list = []
+    for i in test_Predict_prob[0]:
+        st.write("{} : {c}". format(Birth_delivery[j], c = i*100))
+        y_list.append(Birth_delivery[j])
+        x_list.append(i*100)
+        j += 1
 
-        # Print recommended delivery method result and note
-        if test_Predict[0] == 0:
-            result = 'Vaginal Delivery'
-            note = 'Stay active and upright during labour'
-        elif test_Predict[0] == 1:
-            result = 'Lower segment Caesarean section'
-            note = 'You may need to adjust your exercise routine depending on your individual situation'
-        else:
-            result = 'Others'
-            note = 'You might need to consult with a doctor for a suitable birth delivery method'
+    # Plot bar graph for percentage of probability
+    fig, ax = plt.subplots()
+    ax.barh(y_list, x_list)
+    ax.set_xlabel("Percentage of probability (%)")
+    ax.set_ylabel("Delivery Method")
+    ax.set_title("Percentage of each method")
+    st.pyplot(fig)
 
-        st.write("\nYour Recommended Delivery Method Result:", result)
-        st.write(note)
+    # Print recommended delivery method result and note
+    if test_Predict[0] == 0:
+        result = 'Vaginal Delivery'
+        note = 'Stay active and upright during labour'
+    elif test_Predict[0] == 1:
+        result = 'Lower segment Caesarean section'
+        note = 'You may need to adjust your exercise routine depending on your individual situation'
+    else:
+        result = 'Others'
+        note = 'You might need to consult with a doctor for a suitable birth delivery method'
 
-#else :
-#    st.warning('Please answer all questions before submitting.')
+    st.write("\nYour Recommended Delivery Method Result:", result)
+    st.write(note)
+
 
